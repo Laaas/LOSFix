@@ -50,10 +50,9 @@ if Server then
 	end
 
 	function LOSMixin:OnDamageDone(_, target)
-		Log("Did damage to %s", target)
-		if not HasMixin(target, "LOS") then Log "Target did not have LOS mixin!"; return end
-		if target.GetIsAlive and not target:GetIsAlive() then Log "Target is not alive!"; return end
-		if target:GetTeamNumber() == self:GetTeamNumber() then Log "Same team!"; return end
+		if not HasMixin(target, "LOS") then return end
+		if target.GetIsAlive and not target:GetIsAlive() then return end
+		if target:GetTeamNumber() == self:GetTeamNumber() then return end
 
 		target:SetIsSighted()
 	end
@@ -67,27 +66,26 @@ if Server then
 	end
 
 	function LOSMixin:CheckIsSighted()
-		local parasited = self.GetIsParasited and self:GetIsParasited()
-		local timeout   = Shared.GetTime() - self.timeSighted > kLOSTimeout
-		local faraway   = (self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSMaxDistanceSquared
-		if self.sighted and not parasited and (
-			timeout or
-			faraway
+		if self.sighted and not (self.GetIsParasited and self:GetIsParasited()) and (
+			Shared.GetTime() - self.timeSighted > kLOSTimeout or
+			(self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSMaxDistanceSquared
 		) then
-			Log("%s is not longer sighted!", self)
 			self.sighted = false
 			UpdateLOS(self)
-		elseif self.sighted then
-			Log("%s, %s, %s", parasited, timeout, faraway)
 		end
 
 		return true
 	end
 
-	function LOSMixin:OnTeamChange()
+	function LOSMixin:OnKill()
 		self.sighted = false
 		UpdateLOS(self)
 	end
+
+	LOSMixin.OnTeamChange     = LOSMixin.OnKill
+	LOSMixin.OnUseGorgeTunnel = LOSMixin.OnKill
+	LOSMixin.OnPhaseGateEntry = LOSMixin.OnKill
+
 else
 	function LOSMixin:__initmixin()
 	end
