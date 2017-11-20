@@ -13,7 +13,7 @@ LOSMixin = {
 
 local kLOSTimeout                = 2
 local kLOSMaxDistanceSquared     = 7^2
-local kLOSCheckInterval          = 0.5
+local kLOSCheckInterval          = 0.2
 
 function LOSMixin:GetIsSighted()
 	return self.sighted
