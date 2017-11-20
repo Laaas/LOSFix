@@ -3,8 +3,10 @@ This mod completely overhauls how LOS works in NS2.
 
 #Changes
 
-You will only be "sighted" (visible on minimap) if you are **damaged** by an enemy.
-If you **move** away, you will lose your sighted status. (10 meters)
-If you **wait**, you will also lose your sighted status. (4 seconds)
+You will **gain** your sighted status if you are hit by an enemy.
 
-Each "hit" will reset this.
+You will **lose** your sighted status, if you:
+ * Pass through a phase gate
+ * Pass through a gorge tunnel
+ * Move 10 meters away
+ * Wait for 4 seconds
