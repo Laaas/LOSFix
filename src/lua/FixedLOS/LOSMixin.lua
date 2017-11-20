@@ -88,9 +88,10 @@ if Server then
 		end
 	end
 
-	LOSMixin.OnTeamChange     = LOSMixin.OnKill
-	LOSMixin.OnUseGorgeTunnel = LOSMixin.OnKill
-	LOSMixin.OnPhaseGateEntry = LOSMixin.OnKill
+	LOSMixin.OnTeamChange         = LOSMixin.OnKill
+	LOSMixin.OnUseGorgeTunnel     = LOSMixin.OnKill
+	LOSMixin.OnPhaseGateEntry     = LOSMixin.OnKill
+	LOSMixin.TriggerBeaconEffects = LOSMixin.OnKill
 
 else
 	function LOSMixin:__initmixin()
