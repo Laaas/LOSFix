@@ -64,7 +64,7 @@ if Server then
 	end
 
 	function LOSMixin:OnUpdate()
-		if sighted and (
+		if self.sighted and (
 			Shared.GetTime() - self.timeSighted > kLOSTimeout or
 			(self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSDistanceTimeoutSquared
 		) then
