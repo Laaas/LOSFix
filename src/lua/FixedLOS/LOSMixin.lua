@@ -58,11 +58,15 @@ if Server then
 	end
 
 	function LOSMixin:SetIsSighted() -- Always sets sighted to true
+		local old = self.sighted
+
 		self.sighted       = true
 		self.timeSighted   = Shared.GetTime()
 		self.originSighted = self:GetOrigin()
 
-		UpdateLOS(self)
+		if not old then
+			UpdateLOS(self)
+		end
 	end
 
 	function LOSMixin:CheckIsSighted()
@@ -78,8 +82,10 @@ if Server then
 	end
 
 	function LOSMixin:OnKill()
-		self.sighted = false
-		UpdateLOS(self)
+		if self.sighted then
+			self.sighted = false
+			UpdateLOS(self)
+		end
 	end
 
 	LOSMixin.OnTeamChange     = LOSMixin.OnKill
