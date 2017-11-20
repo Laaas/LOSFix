@@ -11,8 +11,9 @@ LOSMixin = {
 	}
 }
 
-local kLOSTimeout = 4
-local kLOSDistanceTimeoutSquared = 7^2
+local kLOSTimeout                = 4
+local kLOSMaxDistanceSquared     = 7^2
+local kLOSCheckInterval          = 0.5
 
 function LOSMixin:GetIsSighted()
 	return self.sighted
@@ -44,6 +45,8 @@ if Server then
 		self.originSighted = Vector()
 
 		UpdateLOS(self)
+
+		self:AddTimedCallback(self.CheckIsSighted, kLOSCheckInterval)
 	end
 
 	function LOSMixin:OnDamageDone(_, target)
@@ -63,14 +66,22 @@ if Server then
 		UpdateLOS(self)
 	end
 
-	function LOSMixin:OnUpdate()
-		if self.sighted and (
-			Shared.GetTime() - self.timeSighted > kLOSTimeout or
-			(self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSDistanceTimeoutSquared
+	function LOSMixin:CheckIsSighted()
+		local parasited = self.GetIsParasited and self:GetIsParasited()
+		local timeout   = Shared.GetTime() - self.timeSighted > kLOSTimeout
+		local faraway   = (self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSMaxDistanceSquared
+		if self.sighted and not parasited and (
+			timeout or
+			faraway
 		) then
+			Log("%s is not longer sighted!", self)
 			self.sighted = false
 			UpdateLOS(self)
+		elseif self.sighted then
+			Log("%s, %s, %s", parasited, timeout, faraway)
 		end
+
+		return true
 	end
 
 	function LOSMixin:OnTeamChange()
