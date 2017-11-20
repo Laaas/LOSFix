@@ -1,6 +1,6 @@
 
 [master]
-name            = "[WIP] LOS Fix"
+name            = "LOS Fix"
 tags            = ["Fix", "Balance", "Gameplay Modification"]
 autodescription = true
 description     = "README.md"
