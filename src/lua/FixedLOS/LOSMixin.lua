@@ -44,8 +44,13 @@ if Server then
 		self.timeSighted   = 0
 		self.originSighted = Vector()
 
-		UpdateLOS(self)
+		self:SetExcludeRelevancyMask(bit.bor(
+			kRelevantToTeam1Unit,
+			kRelevantToTeam2Unit,
+			kRelevantToReadyRoom
+		))
 
+		self:AddTimedCallback(UpdateLOS, 0)
 		self:AddTimedCallback(self.CheckIsSighted, kLOSCheckInterval)
 	end
 
@@ -57,7 +62,9 @@ if Server then
 		target:SetIsSighted()
 	end
 
-	function LOSMixin:SetIsSighted() -- Always sets sighted to true
+	function LOSMixin:SetIsSighted(sighted)
+		if not sighted then return end
+
 		local old = self.sighted
 
 		self.sighted       = true
