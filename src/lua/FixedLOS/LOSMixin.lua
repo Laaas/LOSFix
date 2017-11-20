@@ -11,7 +11,7 @@ LOSMixin = {
 	}
 }
 
-local kLOSTimeout                = 4
+local kLOSTimeout                = 2
 local kLOSMaxDistanceSquared     = 7^2
 local kLOSCheckInterval          = 0.5
 
