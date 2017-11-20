@@ -59,7 +59,7 @@ if Server then
 		if target.GetIsAlive and not target:GetIsAlive() then return end
 		if target:GetTeamNumber() == self:GetTeamNumber() then return end
 
-		target:SetIsSighted()
+		target:SetIsSighted(true)
 	end
 
 	function LOSMixin:SetIsSighted(sighted)
