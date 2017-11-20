@@ -46,11 +46,13 @@ if Server then
 		UpdateLOS(self)
 	end
 
-	function LOSMixin:DoDamage(damage, target)
-		if not HasMixin(target, "LOS") then return end
-		if target.GetIsAlive and not target:GetIsAlive() then return end
+	function LOSMixin:OnDamageDone(_, target)
+		Log("Did damage to %s", target)
+		if not HasMixin(target, "LOS") then Log "Target did not have LOS mixin!"; return end
+		if target.GetIsAlive and not target:GetIsAlive() then Log "Target is not alive!"; return end
+		if target:GetTeamNumber() == self:GetTeamNumber() then Log "Same team!"; return end
 
-		target:SetIsSighted(true)
+		target:SetIsSighted()
 	end
 
 	function LOSMixin:SetIsSighted() -- Always sets sighted to true
