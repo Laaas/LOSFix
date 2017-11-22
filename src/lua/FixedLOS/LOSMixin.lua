@@ -63,15 +63,13 @@ if Server then
 	end
 
 	function LOSMixin:SetIsSighted(sighted)
-		if not sighted then return end
-
 		local old = self.sighted
 
-		self.sighted       = true
+		self.sighted       = sighted
 		self.timeSighted   = Shared.GetTime()
 		self.originSighted = self:GetOrigin()
 
-		if not old then
+		if old ~= sighted then
 			UpdateLOS(self)
 		end
 	end
