@@ -5,3 +5,10 @@ tags            = ["Fix", "Balance", "Gameplay Modification"]
 autodescription = true
 description     = "README.md"
 preview         = "preview.png"
+
+[beta]
+name            = "[WIP] LOS Fix - Beta"
+tags            = ["Fix", "Balance", "Gameplay Modification"]
+autodescription = false
+description     = "description.beta.md"
+preview         = "preview.png"
