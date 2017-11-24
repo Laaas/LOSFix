@@ -87,7 +87,7 @@ if Server then
 
 		if not (self.GetIsCloaked and self:GetIsCloaked()) and EnemyNear(self) then
 			local mask = self:GetExcludeRelevancyMask()
-			self:SetExcludeRelevancyMask(bit.bor(mask, self.kRelevantToEnemyCommander))
+			self:SetExcludeRelevancyMask(bit.bor(mask,  self.kRelevantToEnemyCommander))
 		else
 			local mask = self:GetExcludeRelevancyMask()
 			self:SetExcludeRelevancyMask(bit.band(mask, self.kNotRelevantToEnemyCommander))
@@ -95,7 +95,6 @@ if Server then
 
 		return true
 	end
-
 
 	function LOSMixin:__initmixin()
 		self.sighted       = false
