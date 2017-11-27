@@ -46,7 +46,10 @@ if Server then
 	end
 
 	local function EnemyNear(self)
-		return #GetEntitiesForTeamWithinRange("Player", GetEnemyTeamNumber(self:GetTeamNumber()), self:GetOrigin(), kLOSStructureRange) > 0
+		return
+			#GetEntitiesForTeamWithinRange("Player",  GetEnemyTeamNumber(self:GetTeamNumber()), self:GetOrigin(), kLOSStructureRange) > 0 or
+			#GetEntitiesForTeamWithinRange("Drifter", GetEnemyTeamNumber(self:GetTeamNumber()), self:GetOrigin(), kLOSStructureRange) > 0
+
 	end
 
 	local function Sighted(self)
