@@ -22,3 +22,8 @@ You will **lose** your sighted status, if you:
  - Move 7 meters away
  - Wait for 2 seconds
  - Getting beaconed
+
+#Commander help
+Since this system is much harder on the commanders, any entities within 4 meters of a friendly unit
+will be visible but **not** sighted to the commander. I.e. the models are visible but they're not on
+the minimap.
