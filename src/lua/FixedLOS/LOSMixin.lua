@@ -17,7 +17,7 @@ local kLOSTimeout                = 2
 local kLOSMaxDistanceSquared     = 7^2
 local kLOSCheckInterval          = 0.2
 local kCommanderLOSCheckInterval = 0.5
-local kLOSStructureRange         = 4
+local kLOSStructureRange         = 8
 
 local kNotRelevantToTeam1Commander = bit.bnot(kRelevantToTeam1Commander)
 local kNotRelevantToTeam2Commander = bit.bnot(kRelevantToTeam2Commander)
