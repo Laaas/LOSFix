@@ -24,6 +24,6 @@ You will **lose** your sighted status, if you:
  - Getting beaconed
 
 #Commander help
-Since this system is much harder on the commanders, any entities within 4 meters of a friendly unit
+Since this system is much harder on the commanders, any entities within 4 meters of a friendly player or drifter
 will be visible but **not** sighted to the commander. I.e. the models are visible but they're not on
 the minimap.
