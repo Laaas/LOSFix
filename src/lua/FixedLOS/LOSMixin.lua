@@ -21,6 +21,8 @@ local kCommanderLOSCheckInterval = 0.5 -- also present in Player.lua
 local kNotRelevantToTeam1Commander = bit.bnot(kRelevantToTeam1Commander)
 local kNotRelevantToTeam2Commander = bit.bnot(kRelevantToTeam2Commander)
 
+local rel_mask = "exclude_relevancy_mask_not_sighted"
+
 function LOSMixin:GetIsSighted()
 	return self.sighted
 end
@@ -29,7 +31,7 @@ if Server then
 	local function LateInit(self)
 		local team = self:GetTeamNumber()
 
-		self.exclude_relevancy_mask_not_sighted = bit.bor(
+		self[rel_mask] = bit.bor(
 			kRelevantToTeam1Unit,
 			kRelevantToTeam2Unit,
 			kRelevantToReadyRoom,
@@ -38,12 +40,12 @@ if Server then
 			team == 2 and kRelevantToTeam2Commander or
 			0
 		)
-		self:SetExcludeRelevancyMask(self.exclude_relevancy_mask_not_sighted)
+		self:SetExcludeRelevancyMask(self[rel_mask])
 	end
 
 	local function CheckIsVisibleToCommander(self)
-		if Shared.GetTime() - self.commanderSighted > 0.55 then
-			self:SetExcludeRelevancyMask(self.exclude_relevancy_mask_not_sighted)
+		if self.sighted == false and Shared.GetTime() - self.commanderSighted > 0.55 then
+			self:SetExcludeRelevancyMask(self[rel_mask] or 0)
 		end
 
 		return true
@@ -75,16 +77,11 @@ if Server then
 	end
 
 	function LOSMixin:__initmixin()
-		self.commanderSighted = -1000
-		self.drifterScanned   = -1000
-		self.timeSighted      = -1000
+		self.commanderSighted = 0
+		self.timeSighted      = 0
 		self.originSighted    = Vector()
 
-		self:SetExcludeRelevancyMask(bit.bor(
-			kRelevantToTeam1Unit,
-			kRelevantToTeam2Unit,
-			kRelevantToReadyRoom
-		))
+		LateInit(self)
 
 		self:OnSighted(false)
 
@@ -102,27 +99,19 @@ if Server then
 		if target.GetIsAlive and not target:GetIsAlive() then return end
 		if target:GetTeamNumber() == self:GetTeamNumber() then return end
 
-		if target.sighted == false then
-			Sighted(target)
-		end
+		Sighted(target)
 	end
 
 	function LOSMixin:SetIsSighted(sighted)
-		local old = self.sighted
-
-		if old ~= sighted then
-			if sighted then
-				Sighted(self)
-			else
-				NotSighted(self)
-			end
+		if sighted then
+			Sighted(self)
+		else
+			NotSighted(self)
 		end
 	end
 
 	function LOSMixin:OnKill()
-		if self.sighted then
-			NotSighted(self)
-		end
+		NotSighted(self)
 	end
 
 	LOSMixin.OnUseGorgeTunnel     = LOSMixin.OnKill
