@@ -16,8 +16,7 @@ LOSMixin = {
 local kLOSTimeout                = 2
 local kLOSMaxDistanceSquared     = 7^2
 local kLOSCheckInterval          = 0.2
-local kCommanderLOSCheckInterval = 0.5
-local kLOSStructureRange         = 8
+local kCommanderLOSCheckInterval = 0.5 -- also present in Player.lua
 
 local kNotRelevantToTeam1Commander = bit.bnot(kRelevantToTeam1Commander)
 local kNotRelevantToTeam2Commander = bit.bnot(kRelevantToTeam2Commander)
@@ -30,47 +29,37 @@ if Server then
 	local function LateInit(self)
 		local team = self:GetTeamNumber()
 
-		self.kRelevantToEnemyCommander =
-			team == 1 and kRelevantToTeam2Commander or
-			team == 2 and kRelevantToTeam1Commander or
-			0
-		self.kNotRelevantToEnemyCommander = bit.bnot(self.kRelevantToEnemyCommander)
+		self.exclude_relevancy_mask_not_sighted = bit.bor(
+			kRelevantToTeam1Unit,
+			kRelevantToTeam2Unit,
+			kRelevantToReadyRoom,
 
-		local mask = self:GetExcludeRelevancyMask()
-
-		self:SetExcludeRelevancyMask(bit.bor(mask,
 			team == 1 and kRelevantToTeam1Commander or
 			team == 2 and kRelevantToTeam2Commander or
 			0
-		))
+		)
+		self:SetExcludeRelevancyMask(self.exclude_relevancy_mask_not_sighted)
 	end
 
-	local function EnemyNear(self)
-		return
-			#GetEntitiesForTeamWithinRange("Player",  GetEnemyTeamNumber(self:GetTeamNumber()), self:GetOrigin(), kLOSStructureRange) > 0 or
-			#GetEntitiesForTeamWithinRange("Drifter", GetEnemyTeamNumber(self:GetTeamNumber()), self:GetOrigin(), kLOSStructureRange) > 0
+	local function CheckIsVisibleToCommander(self)
+		if Shared.GetTime() - self.commanderSighted > 0.55 then
+			self:SetExcludeRelevancyMask(self.exclude_relevancy_mask_not_sighted)
+		end
 
+		return true
 	end
 
 	local function Sighted(self)
-		self.sighted       = true
 		self.timeSighted   = Shared.GetTime()
 		self.originSighted = self:GetOrigin()
 
-		local mask = self:GetExcludeRelevancyMask()
-		self:SetExcludeRelevancyMask(bit.bor(mask, self.kRelevantToEnemyCommander))
+		self:SetExcludeRelevancyMask(0x1F)
 
 		self:OnSighted(true)
 	end
 
 	local function NotSighted(self)
-		self.sighted = false
-
-		if not EnemyNear(self) then
-			local mask = self:GetExcludeRelevancyMask()
-			self:SetExcludeRelevancyMask(bit.band(mask, self.kNotRelevantToEnemyCommander))
-		end
-
+		CheckIsVisibleToCommander(self)
 		self:OnSighted(false)
 	end
 
@@ -85,27 +74,11 @@ if Server then
 		return true
 	end
 
-	local function CheckIsVisibleToCommander(self)
-		if self.sighted then return true end
-
-		if not (self.GetIsCloaked and self:GetIsCloaked()) and EnemyNear(self) then
-			local mask = self:GetExcludeRelevancyMask()
-			self:SetExcludeRelevancyMask(bit.bor(mask,  self.kRelevantToEnemyCommander))
-		else
-			local mask = self:GetExcludeRelevancyMask()
-			self:SetExcludeRelevancyMask(bit.band(mask, self.kNotRelevantToEnemyCommander))
-		end
-
-		return true
-	end
-
 	function LOSMixin:__initmixin()
-		self.sighted       = false
-		self.timeSighted   = -1000
-		self.originSighted = Vector()
-
-		self.kRelevantToEnemyCommander    = 0
-		self.kNotRelevantToEnemyCommander = bit.bnot(0)
+		self.commanderSighted = -1000
+		self.drifterScanned   = -1000
+		self.timeSighted      = -1000
+		self.originSighted    = Vector()
 
 		self:SetExcludeRelevancyMask(bit.bor(
 			kRelevantToTeam1Unit,
@@ -121,6 +94,7 @@ if Server then
 	end
 
 	function LOSMixin:OnSighted(sighted)
+		self.sighted = sighted
 	end
 
 	function LOSMixin:OnDamageDone(_, target)
@@ -128,7 +102,7 @@ if Server then
 		if target.GetIsAlive and not target:GetIsAlive() then return end
 		if target:GetTeamNumber() == self:GetTeamNumber() then return end
 
-		if not target.sighted then
+		if target.sighted == false then
 			Sighted(target)
 		end
 	end
@@ -145,13 +119,6 @@ if Server then
 		end
 	end
 
-	function LOSMixin:OnTeamChange()
-		if self.sighted then
-			NotSighted(self)
-		end
-		LateInit(self)
-	end
-
 	function LOSMixin:OnKill()
 		if self.sighted then
 			NotSighted(self)
@@ -161,6 +128,7 @@ if Server then
 	LOSMixin.OnUseGorgeTunnel     = LOSMixin.OnKill
 	LOSMixin.OnPhaseGateEntry     = LOSMixin.OnKill
 	LOSMixin.TriggerBeaconEffects = LOSMixin.OnKill
+	LOSMixin.OnTeamChange         = LOSMixin.OnKill
 
 else
 	function LOSMixin:__initmixin()
