@@ -15,11 +15,10 @@ end
 local function Iterate(entities, time, dir, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
-		if ent:GetTeamNumber() ~= team and time - ent.timeSighted > 1 then
-			local ent_origin = ent:GetOrigin()
-			local diff       = ent_origin - origin
-			local within = math.acos(dir:DotProduct(diff) / diff:GetLength()) < 45 -- length of dir is always 1, we hope
-			if within and Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, kPhysicsMask).entity == ent then
+		if ent:GetTeamNumber() ~= team and not ent.fullyCloaked and time - ent.timeSighted > 1 then
+			local ent_origin = ent:GetModelOrigin()
+			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, kPhysicsMask)
+			if trace.entity == ent or trace.fraction == 1 then
 				ent:SetIsSighted(true)
 			end
 		end
@@ -33,21 +32,15 @@ local function Check(self)
 	local origin = coords.origin
 	local team   = self:GetTeamNumber()
 
-	Iterate(
-		Shared.GetEntitiesWithTagInRange("LOS", origin + dir * 5, 10),
-		time,
-		dir,
-		origin,
-		team
-	)
-
-	Iterate(
-		Shared.GetEntitiesWithTagInRange("LOS", origin + dir * 10, 10),
-		time,
-		dir,
-		origin,
-		team
-	)
+	for i = 5, 15, 5 do
+		Iterate(
+			Shared.GetEntitiesWithTagInRange("LOS", origin + dir * i, 5),
+			time,
+			dir,
+			origin,
+			team
+		)
+	end
 
 	return true
 end
