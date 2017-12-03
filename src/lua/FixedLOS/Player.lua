@@ -12,10 +12,10 @@ for _, v in ipairs {
 	kPhysicsMask = bit.bor(kPhysicsMask, PhysicsGroup[v .. "Group"])
 end
 
-local function Iterate(entities, time, dir, origin)
+local function Iterate(entities, time, dir, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
-		if ent:GetTeamNumber() ~= self:GetTeamNumber() and time - ent.timeSighted > 1 then
+		if ent:GetTeamNumber() ~= team and time - ent.timeSighted > 1 then
 			local ent_origin = ent:GetOrigin()
 			local diff       = ent_origin - origin
 			local within = math.acos(dir:DotProduct(diff) / diff:GetLength()) < 45 -- length of dir is always 1, we hope
@@ -31,19 +31,22 @@ local function Check(self)
 	local coords = self:GetViewCoords()
 	local dir    = coords.zAxis
 	local origin = coords.origin
+	local team   = self:GetTeamNumber()
 
 	Iterate(
 		Shared.GetEntitiesWithTagInRange("LOS", origin + dir * 5, 10),
 		time,
 		dir,
-		origin
+		origin,
+		team
 	)
 
 	Iterate(
 		Shared.GetEntitiesWithTagInRange("LOS", origin + dir * 10, 10),
 		time,
 		dir,
-		origin
+		origin,
+		team
 	)
 
 	return true
