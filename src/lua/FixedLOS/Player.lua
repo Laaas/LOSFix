@@ -5,9 +5,9 @@ for _, v in ipairs {
 	"Default",
 	"BigStructures",
 	"Whip",
-	"CommanderPropsGroup",
-	"CommanderUnitGroup",
-	"CommanderBuildGroup",
+	"CommanderProps",
+	"CommanderUnit",
+	"CommanderBuild",
 } do
 	kPhysicsMask = bit.bor(kPhysicsMask, PhysicsGroup[v .. "Group"])
 end
