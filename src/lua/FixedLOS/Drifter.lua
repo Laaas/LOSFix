@@ -1,7 +1,7 @@
 if not Server then return end
 
 local kInterval = 0.5
-local kRadius   = 8
+local kRadius   = 10
 local function Check(self)
 	local entities = Shared.GetEntitiesWithTagInRange("LOS", self:GetOrigin(), kRadius)
 	local time = Shared.GetTime()
