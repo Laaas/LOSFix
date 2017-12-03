@@ -16,10 +16,6 @@ LOSMixin = {
 local kLOSTimeout                = 2
 local kLOSMaxDistanceSquared     = 7^2
 local kLOSCheckInterval          = 0.2
-local kCommanderLOSCheckInterval = 0.5 -- also present in Player.lua
-
-local kNotRelevantToTeam1Commander = bit.bnot(kRelevantToTeam1Commander)
-local kNotRelevantToTeam2Commander = bit.bnot(kRelevantToTeam2Commander)
 
 local rel_mask = "exclude_relevancy_mask_not_sighted"
 
@@ -43,14 +39,6 @@ if Server then
 		self:SetExcludeRelevancyMask(self[rel_mask])
 	end
 
-	local function CheckIsVisibleToCommander(self)
-		if self.sighted == false and Shared.GetTime() - self.commanderSighted > 0.55 then
-			self:SetExcludeRelevancyMask(self[rel_mask] or 0)
-		end
-
-		return true
-	end
-
 	local function Sighted(self)
 		self.timeSighted   = Shared.GetTime()
 		self.originSighted = self:GetOrigin()
@@ -61,7 +49,7 @@ if Server then
 	end
 
 	local function NotSighted(self)
-		CheckIsVisibleToCommander(self)
+		self:SetExcludeRelevancyMask(self[rel_mask] or 0)
 		self:OnSighted(false)
 	end
 
@@ -77,7 +65,6 @@ if Server then
 	end
 
 	function LOSMixin:__initmixin()
-		self.commanderSighted = 0
 		self.timeSighted      = 0
 		self.originSighted    = Vector()
 
@@ -86,8 +73,7 @@ if Server then
 		self:OnSighted(false)
 
 		self:AddTimedCallback(LateInit, 0)
-		self:AddTimedCallback(CheckIsSighted,            kLOSCheckInterval)
-		self:AddTimedCallback(CheckIsVisibleToCommander, kCommanderLOSCheckInterval)
+		self:AddTimedCallback(CheckIsSighted, kLOSCheckInterval)
 	end
 
 	function LOSMixin:OnSighted(sighted)
