@@ -14,7 +14,10 @@ It wasn't very conservative, while this one is. False positives are much more ra
 
 #Changes
 
-You will **gain** your sighted status if you are hit by an enemy.
+You will **gain** your sighted status if you:
+ - Are damaged by an enemy
+ - Are in front of a player
+ - Are near a drifter
 
 You will **lose** your sighted status, if you:
  - Pass through a phase gate
@@ -22,8 +25,3 @@ You will **lose** your sighted status, if you:
  - Move 7 meters away
  - Wait for 2 seconds
  - Getting beaconed
-
-#Commander help
-Since this system is much harder on the commanders, any entities within 4 meters of a friendly player or drifter
-will be visible but **not** sighted to the commander. I.e. the models are visible but they're not on
-the minimap.
