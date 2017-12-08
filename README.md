@@ -16,8 +16,7 @@ It wasn't very conservative, while this one is. False positives are much more ra
 
 You will **gain** your sighted status if you:
  - Are damaged by an enemy
- - Are in front of a player
- - Are near a drifter
+ - Are in front of a player or drifter
 
 You will **lose** your sighted status, if you:
  - Pass through a phase gate
