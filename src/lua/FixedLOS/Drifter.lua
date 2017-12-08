@@ -27,7 +27,7 @@ end
 
 local function Check(self)
 	local time = Shared.GetTime()
-	local coords = self:GetViewCoords()
+	local coords = self:GetCoords()
 	local dir    = coords.zAxis
 	local origin = coords.origin
 	local team   = self:GetTeamNumber()
