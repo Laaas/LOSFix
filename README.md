@@ -21,6 +21,6 @@ You will **gain** your sighted status if you:
 You will **lose** your sighted status, if you:
  - Pass through a phase gate
  - Pass through a gorge tunnel
+ - Get beaconed
  - Move 7 meters away
  - Wait for 2 seconds
- - Getting beaconed
