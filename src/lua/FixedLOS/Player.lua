@@ -4,6 +4,8 @@ local kPhysicsMask = 0 -- What can we not see through?
 for _, v in ipairs {
 	"Default",
 	"BigStructures",
+	"MediumStructures",
+	"SmallStructures",
 	"Whip",
 	"CommanderProps",
 	"CommanderUnit",
