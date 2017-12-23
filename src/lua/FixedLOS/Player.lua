@@ -1,17 +1,7 @@
 if not Server then return end
 
-local kPhysicsMask = 0 -- What can we not see through?
-for _, v in ipairs {
-	"Default",
-	"BigStructures",
-	"MediumStructures",
-	"SmallStructures",
-	"Whip",
-	"CommanderProps",
-	"CommanderUnit",
-	"CommanderBuild",
-} do
-	kPhysicsMask = bit.bor(kPhysicsMask, PhysicsGroup[v .. "Group"])
+local function filter(ent)
+    return ent ~= nil
 end
 
 local function Iterate(entities, time, dir, origin, team)
@@ -19,8 +9,8 @@ local function Iterate(entities, time, dir, origin, team)
 		local ent = entities[i]
 		if ent:GetTeamNumber() ~= team and not ent.fullyCloaked and time - ent.timeSighted > 1 then
 			local ent_origin = ent:GetModelOrigin()
-			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, kPhysicsMask)
-			if trace.entity == ent or trace.fraction == 1 then
+			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, 0xFFFFFFFF, filter)
+			if trace.fraction == 1 then
 				ent:SetIsSighted(true)
 			end
 		end
