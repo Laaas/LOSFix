@@ -1,7 +1,7 @@
 if not Server then return end
 
 local function filter(ent)
-    return ent ~= nil
+    return not ent:isa "Door"
 end
 
 local function Iterate(entities, time, dir, origin, team)
