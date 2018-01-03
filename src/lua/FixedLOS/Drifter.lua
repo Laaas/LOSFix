@@ -14,7 +14,7 @@ for _, v in ipairs {
 	kPhysicsMask = bit.bor(kPhysicsMask, PhysicsGroup[v .. "Group"])
 end
 
-local function Iterate(entities, time, dir, origin, team)
+local function Iterate(entities, time, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
 		if ent:GetTeamNumber() ~= team and not ent.fullyCloaked and time - ent.timeSighted > 1 then
@@ -30,19 +30,15 @@ end
 local function Check(self)
 	local time = Shared.GetTime()
 	local coords = self:GetCoords()
-	local dir    = coords.zAxis
 	local origin = coords.origin
 	local team   = self:GetTeamNumber()
 
-	for i = 5, 15, 5 do
-		Iterate(
-			Shared.GetEntitiesWithTagInRange("LOS", origin + dir * i, 5),
-			time,
-			dir,
-			origin,
-			team
-		)
-	end
+	Iterate(
+		Shared.GetEntitiesWithTagInRange("LOS", origin, 15),
+		time,
+		origin,
+		team
+	)
 
 	return true
 end
