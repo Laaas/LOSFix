@@ -23,6 +23,8 @@ function LOSMixin:GetIsSighted()
 	return self.sighted
 end
 
+function LOSMixin:MarkNearbyDirtyImmediately() end
+
 if Server then
 	local function LateInit(self)
 		local team = self:GetTeamNumber()
