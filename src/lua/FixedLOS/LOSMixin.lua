@@ -38,7 +38,9 @@ if Server then
 			team == 2 and kRelevantToTeam2Commander or
 			0
 		)
-		self:SetExcludeRelevancyMask(self[rel_mask])
+		if not self.sighted then
+			self:SetExcludeRelevancyMask(self[rel_mask])
+		end
 	end
 
 	local function Sighted(self)
@@ -73,9 +75,7 @@ if Server then
 		self.originSighted    = Vector(-2^10, -2^10, -2^10)
 
 		LateInit(self)
-
-		self.sighted = false
-		self:OnSighted(false)
+		NotSighted(self)
 
 		self:AddTimedCallback(LateInit, 0)
 		self:AddTimedCallback(CheckIsSighted, kLOSCheckInterval)
