@@ -1,10 +1,10 @@
-#About
+# About
 This mod completely overhauls how LOS works in NS2.
 
 In NS2, if you are "sighted", you will be visible
 on the enemy team's minimap.
 
-#Benefits
+# Benefits
 
 The LOS system in NS2 is very complicated, and also potentially uses a lot of resources.
 This version is much much more lightweight. It is also more straightfoward and easier to understand.
@@ -12,7 +12,7 @@ This version is much much more lightweight. It is also more straightfoward and e
 Furthermore, the original LOS system some times showed things which obviously should not be seen.
 It wasn't very conservative, while this one is. False positives are much more rare.
 
-#Changes
+# Changes
 
 You will **gain** your sighted status if you:
  - Are damaged by an enemy
