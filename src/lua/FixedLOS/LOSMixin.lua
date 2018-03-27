@@ -47,11 +47,13 @@ if Server then
 
 		self:SetExcludeRelevancyMask(0x1F)
 
+		self.sighted = true
 		self:OnSighted(true)
 	end
 
 	local function NotSighted(self)
 		self:SetExcludeRelevancyMask(self[rel_mask] or 0)
+		self.sighted = false
 		self:OnSighted(false)
 	end
 
@@ -72,6 +74,7 @@ if Server then
 
 		LateInit(self)
 
+		self.sighted = false
 		self:OnSighted(false)
 
 		self:AddTimedCallback(LateInit, 0)
@@ -79,7 +82,6 @@ if Server then
 	end
 
 	function LOSMixin:OnSighted(sighted)
-		self.sighted = sighted
 	end
 
 	function LOSMixin:OnDamageDone(_, target)
