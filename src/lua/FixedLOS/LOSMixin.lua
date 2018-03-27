@@ -100,14 +100,11 @@ if Server then
 		end
 	end
 
-	function LOSMixin:OnKill()
-		NotSighted(self)
-	end
-
-	LOSMixin.OnUseGorgeTunnel     = LOSMixin.OnKill
-	LOSMixin.OnPhaseGateEntry     = LOSMixin.OnKill
-	LOSMixin.TriggerBeaconEffects = LOSMixin.OnKill
-	LOSMixin.OnTeamChange         = LOSMixin.OnKill
+	LOSMixin.OnKill               = NotSighted
+	LOSMixin.OnUseGorgeTunnel     = NotSighted
+	LOSMixin.OnPhaseGateEntry     = NotSighted
+	LOSMixin.TriggerBeaconEffects = NotSighted
+	LOSMixin.OnTeamChange         = NotSighted
 
 else
 	function LOSMixin:__initmixin()
