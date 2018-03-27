@@ -52,7 +52,7 @@ if Server then
 	end
 
 	local function NotSighted(self)
-		self:SetExcludeRelevancyMask(self[rel_mask] or 0)
+		self:SetExcludeRelevancyMask(self[rel_mask] or 3)
 		self.sighted = false
 		self:OnSighted(false)
 	end
@@ -69,8 +69,8 @@ if Server then
 	end
 
 	function LOSMixin:__initmixin()
-		self.timeSighted      = 0
-		self.originSighted    = Vector()
+		self.timeSighted      = -1000
+		self.originSighted    = Vector(-2^10, -2^10, -2^10)
 
 		LateInit(self)
 
