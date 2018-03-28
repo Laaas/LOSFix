@@ -5,6 +5,7 @@ tags            = ["Fix", "Balance", "Gameplay Modification"]
 autodescription = true
 description     = "README.md"
 preview         = "preview.png"
+website         = "https://github.com/Laaas/NS2FixedLOS/"
 
 [beta]
 name            = "LOS Fix - Beta"
