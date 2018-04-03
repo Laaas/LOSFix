@@ -41,5 +41,7 @@ local old = Player.OnCreate
 function Player:OnCreate()
 	old(self)
 
-	self:AddTimedCallback(Check, 0.5)
+	if not self:isa "Spectator" and not self:isa "Commander" then
+		self:AddTimedCallback(Check, 0.5)
+	end
 end
