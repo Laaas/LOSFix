@@ -7,7 +7,7 @@ end
 local function Iterate(entities, time, dir, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
-		if ent:GetTeamNumber() ~= team and not ent.fullyCloaked and time - ent.timeSighted > 1 then
+		if ent.teamNumber ~= team and not ent.fullyCloaked and ent:GetIsVisible() and time - ent.timeSighted > 1 then
 			local ent_origin = ent:GetModelOrigin()
 			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, 0xFFFFFFFF, filter)
 			if trace.fraction == 1 then
@@ -18,7 +18,9 @@ local function Iterate(entities, time, dir, origin, team)
 end
 
 local function Check(self)
-	local time = Shared.GetTime()
+	if not self:GetIsAlive() then return end
+
+	local time   = Shared.GetTime()
 	local coords = self:GetViewCoords()
 	local dir    = coords.zAxis
 	local origin = coords.origin
@@ -41,7 +43,10 @@ local old = Player.OnCreate
 function Player:OnCreate()
 	old(self)
 
-	if not self:isa "Spectator" and not self:isa "Commander" then
+	if
+		not self:isa "Spectator" and not self:isa "Commander" and
+		(self:GetTeamNumber() == 1 or self:GetTeamNumber() == 2)
+	then -- other teams can't cause others to be sighted
 		self:AddTimedCallback(Check, 0.5)
 	end
 end
