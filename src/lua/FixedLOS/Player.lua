@@ -39,8 +39,8 @@ local function Check(self)
 	return true
 end
 
-local old = Player.OnCreate
-function Player:OnCreate()
+local old = assert(Player.OnInitialized)
+function Player:OnInitialized()
 	old(self)
 
 	if
