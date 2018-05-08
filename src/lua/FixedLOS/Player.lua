@@ -7,7 +7,7 @@ end
 local function Iterate(entities, time, dir, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
-		if ent.teamNumber ~= team and not ent.fullyCloaked and ent:GetIsVisible() and time - ent.timeSighted > 1 then
+		if ent.teamNumber ~= team and time - ent.timeSighted > 1 and not ent.fullyCloaked and ent:GetIsVisible() then
 			local ent_origin = ent:GetModelOrigin()
 			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, 0xFFFFFFFF, filter)
 			if trace.fraction == 1 then
