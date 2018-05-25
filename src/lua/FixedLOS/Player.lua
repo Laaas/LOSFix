@@ -27,10 +27,7 @@ local function Check(self)
 	local time   = Shared.GetTime()
 	local coords = self:GetViewCoords()
 	local dir    = coords.zAxis
-	-- We have a slight offset here so that we can sight
-	-- enemies that touch our behinds, without expensive collision
-	-- detection.
-	local origin = coords.origin - dir * 0.15
+	local origin = coords.origin
 	local team   = self:GetTeamNumber()
 
 	-- Filter is not used here, since it is not possible
