@@ -1,9 +1,5 @@
 if not Server then return end
 
-local max = math.max
-
-local kMaxViewDistance = kMaxRelevancyDistance * 0.75
-
 local function filter(ent)
     return not ent:isa "Door"
 end
@@ -30,24 +26,9 @@ local function Check(self)
 	local origin = coords.origin
 	local team   = self:GetTeamNumber()
 
-	local trace = Shared.TraceRay(origin, origin + dir * kMaxViewDistance, CollisionRep.LOS, 0xFFFFFFFF, filter)
-	-- Offset is needed here to see things that we barely hit
-	local view_distance = max(kMaxViewDistance * trace.fraction + (1 - 5), 5)
-
-	for i = 5, view_distance, 5 do
+	for i = 5, 15, 5 do
 		Iterate(
 			Shared.GetEntitiesWithTagInRange("LOS", origin + dir * i, 5),
-			time,
-			dir,
-			origin,
-			team
-		)
-	end
-
-	-- if (view_distance - 1) % 5 ~= 0 then
-	if trace.fraction ~= 1 then
-		Iterate(
-			Shared.GetEntitiesWithTagInRange("LOS", origin + dir * view_distance, 5),
 			time,
 			dir,
 			origin,
