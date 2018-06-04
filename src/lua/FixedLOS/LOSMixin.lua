@@ -49,9 +49,11 @@ if Server then
 
 		self:SetExcludeRelevancyMask(0x1F)
 
+		--[[
 		if LOSFixDebug then
 			Log("Sighted: %s @ %s | %s", self, self:GetLocationName(), self:GetOrigin())
 		end
+		--]]
 
 		self.sighted = true
 		self:OnSighted(true)
