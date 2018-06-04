@@ -106,6 +106,8 @@ if Server then
 		end
 	end
 
+	LOSMixin.SetParasited = Sighted
+
 	LOSMixin.OnKill               = NotSighted
 	LOSMixin.OnUseGorgeTunnel     = NotSighted
 	LOSMixin.OnPhaseGateEntry     = NotSighted
