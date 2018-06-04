@@ -66,7 +66,7 @@ if Server then
 	end
 
 	local function CheckIsSighted(self)
-		if self.sighted and not (self.GetIsParasited and self:GetIsParasited()) and (
+		if self.sighted and not self.parasited and (
 			Shared.GetTime() - self.timeSighted > kLOSTimeout or
 			(self:GetOrigin() - self.originSighted):GetLengthSquared() > kLOSMaxDistanceSquared
 		) then
