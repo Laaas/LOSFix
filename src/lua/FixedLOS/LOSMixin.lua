@@ -113,6 +113,7 @@ if Server then
 	LOSMixin.OnPhaseGateEntry     = NotSighted
 	LOSMixin.TriggerBeaconEffects = NotSighted
 	LOSMixin.OnTeamChange         = NotSighted
+	LOSMixin.OnTeleportEnd        = NotSighted
 
 else
 	function LOSMixin:__initmixin()
