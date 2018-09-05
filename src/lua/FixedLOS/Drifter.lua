@@ -18,7 +18,7 @@ local function Iterate(entities, time, origin, team)
 	for i = 1, #entities do
 		local ent = entities[i]
 		if ent:GetTeamNumber() ~= team and not ent.fullyCloaked and time - ent.timeSighted > 1 then
-			local ent_origin = ent:GetModelOrigin()
+			local ent_origin = ent.GetModelOrigin and ent:GetModelOrigin() or ent:GetOrigin()
 			local trace = Shared.TraceRay(origin, ent_origin, CollisionRep.LOS, kPhysicsMask)
 			if trace.entity == ent or trace.fraction == 1 then
 				ent:SetIsSighted(true)
